@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M&M • حلاقة رجالية</title>
+    <!-- Preload للخطوط والأيقونات -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- شاشة التحميل -->
+    <div class="loader-wrapper" id="loader">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <div class="loader-logo-icon">
+                    <span class="m-letter">M</span>
+                    <span class="ampersand">&</span>
+                    <span class="m-letter">M</span>
+                </div>
+                <div class="loader-logo-glow"></div>
+            </div>
+            <div class="loader-bar">
+                <div class="loader-progress" id="loaderProgress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content" id="mainContent">
+        <!-- خلفية متحركة -->
+        <div class="bg-gradient"></div>
+        <div class="bg-particles" id="particles"></div>
+        
+        <!-- عناصر زخرفية -->
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+
+        <!-- بطاقة الحجز -->
+        <div class="booking-card">
+            <!-- الزوايا المضيئة -->
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+            
+            <!-- اللوجو الرئيسي -->
+            <div class="card-logo">
+                <div class="logo-ring"></div>
+                <div class="logo-main">
+                    <span class="logo-m">M</span>
+                    <span class="logo-amp">&</span>
+                    <span class="logo-m">M</span>
+                </div>
+            </div>
+            
+            <h1 class="card-title">BARBER SHOP</h1>
+            <p class="card-subtitle">حجز كود الحلاقة الفريد</p>
+
+            <!-- نموذج الحجز -->
+            <form class="booking-form" id="bookingForm">
+                <!-- حقل الاسم الأول -->
+                <div class="input-group">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="firstName" class="form-input" placeholder="الاسم الأول" required>
+                    <div class="input-focus-border"></div>
+                </div>
+
+                <!-- حقل اسم العائلة -->
+                <div class="input-group">
+                    <i class="fas fa-user-tie input-icon"></i>
+                    <input type="text" id="lastName" class="form-input" placeholder="اسم العائلة" required>
+                    <div class="input-focus-border"></div>
+                </div>
+
+                <!-- رقم الهاتف -->
+                <div class="input-group">
+                    <i class="fas fa-phone input-icon"></i>
+                    <input type="tel" id="phone" class="form-input" placeholder="رقم الهاتف" required>
+                    <div class="input-focus-border"></div>
+                </div>
+
+                <!-- قسم الكود -->
+                <div class="code-wrapper">
+                    <div class="code-label">
+                        <i class="fas fa-cut"></i>
+                        <span>كود الحجز</span>
+                    </div>
+                    <div class="code-box">
+                        <span class="code-number" id="codeDisplay">1</span>
+                    </div>
+                </div>
+
+                <!-- رسائل الخطأ -->
+                <div class="error-message" id="codeError">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>هذا الكود مستخدم - تم تحديثه تلقائياً</span>
+                </div>
+                
+                <div class="error-message" id="validationError">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>الرجاء تعبئة جميع الحقول المطلوبة</span>
+                </div>
+
+                <!-- أزرار الإرسال - بالتصميم السابق والأسماء الجديدة -->
+                <div class="buttons-container">
+                    <button type="submit" class="submit-btn" id="sendToFirstBtn" data-number="201126432778">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>ارسال الحجز محمود</span>
+                    </button>
+                    
+                    <button type="submit" class="submit-btn" id="sendToSecondBtn" data-number="201503258404">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>ارسال الحجز محمد</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- الفوتر مع عداد الزيارات -->
+            <div class="card-footer">
+                <div class="visitor-counter">
+                    <i class="fas fa-eye"></i>
+                    <span class="counter-text">عدد الزيارات</span>
+                    <span class="counter-number" id="visitorCount">0</span>
+                </div>
+                
+                <div class="footer-text">تم التطوير بواسطة</div>
+                <div class="developer-wrapper">
+                    <span class="developer-name" id="devLink">Eng Kareem Eltabkh</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

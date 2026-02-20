@@ -1,0 +1,721 @@
+/* ===== المتغيرات ===== */
+:root {
+    --gold-primary: #D4AF37;
+    --gold-secondary: #B49450;
+    --gold-light: #F5D742;
+    --gold-dark: #8B691B;
+    --bg-dark: #030303;
+    --bg-card: rgba(18, 18, 18, 0.95);
+    --text-primary: #FFFFFF;
+    --text-secondary: #AAAAAA;
+    --error-color: #FF4D4D;
+    --success-color: #25D366;
+    --transition: 0.3s ease;
+}
+
+/* ===== الأساسيات ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background: #030303;
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: #FFFFFF;
+}
+
+/* ===== شاشة التحميل ===== */
+.loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #030303;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loader-wrapper.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-content {
+    text-align: center;
+    width: 280px;
+}
+
+.loader-logo {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-logo-icon {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 4rem;
+    font-weight: 900;
+    color: #D4AF37;
+    text-shadow: 0 0 30px #D4AF37;
+    animation: logoPulse 1.5s infinite;
+}
+
+.m-letter {
+    animation: letterGlow 1.5s infinite;
+}
+
+.m-letter:first-child {
+    animation-delay: 0s;
+}
+
+.ampersand {
+    color: #F5D742;
+    font-size: 3.5rem;
+    animation: ampersandGlow 1.5s infinite;
+    animation-delay: 0.3s;
+}
+
+.m-letter:last-child {
+    animation-delay: 0.6s;
+}
+
+@keyframes logoPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+@keyframes letterGlow {
+    0%, 100% { text-shadow: 0 0 30px #D4AF37; }
+    50% { text-shadow: 0 0 60px #F5D742; }
+}
+
+@keyframes ampersandGlow {
+    0%, 100% { text-shadow: 0 0 30px #F5D742; }
+    50% { text-shadow: 0 0 70px #D4AF37; }
+}
+
+.loader-logo-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: glowPulse 2s infinite;
+    z-index: 1;
+}
+
+@keyframes glowPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+}
+
+.loader-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.loader-progress {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #B49450, #F5D742);
+    border-radius: 4px;
+    transition: width 0.1s linear;
+}
+
+/* ===== المحتوى الرئيسي ===== */
+.main-content {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+}
+
+.main-content.visible {
+    opacity: 1;
+}
+
+/* ===== الخلفية ===== */
+.bg-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 30%, #1A150A, #000000);
+    z-index: -2;
+}
+
+.bg-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(212, 175, 55, 0.3);
+    border-radius: 50%;
+    animation: particleFloat 10s infinite linear;
+}
+
+@keyframes particleFloat {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10% { opacity: 0.5; }
+    90% { opacity: 0.5; }
+    100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
+}
+
+/* ===== عناصر زخرفية ===== */
+.shape {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.2;
+    z-index: -1;
+}
+
+.shape-1 {
+    background: #8B691B;
+    top: -100px;
+    right: -100px;
+    animation: shapeMove 15s infinite alternate;
+}
+
+.shape-2 {
+    background: #B49450;
+    bottom: -100px;
+    left: -100px;
+    animation: shapeMove 20s infinite alternate-reverse;
+}
+
+@keyframes shapeMove {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(50px, 50px) scale(1.2); }
+}
+
+/* ===== بطاقة الحجز ===== */
+.booking-card {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    background: rgba(18, 18, 18, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 40px;
+    padding: 30px 25px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(212, 175, 55, 0.3) inset;
+    animation: cardAppear 0.8s ease-out;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+@keyframes cardAppear {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== الزوايا المضيئة ===== */
+.corner {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #D4AF37;
+    filter: drop-shadow(0 0 10px #D4AF37);
+    opacity: 0.5;
+}
+
+.corner-tl {
+    top: 15px;
+    left: 15px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.corner-tr {
+    top: 15px;
+    right: 15px;
+    border-left: none;
+    border-bottom: none;
+}
+
+.corner-bl {
+    bottom: 15px;
+    left: 15px;
+    border-right: none;
+    border-top: none;
+}
+
+.corner-br {
+    bottom: 15px;
+    right: 15px;
+    border-left: none;
+    border-top: none;
+}
+
+/* ===== اللوجو الرئيسي ===== */
+.card-logo {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-ring {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: 50%;
+    animation: rotateRing 10s linear infinite;
+}
+
+.logo-ring::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background: #D4AF37;
+    border-radius: 50%;
+    box-shadow: 0 0 20px #D4AF37;
+}
+
+@keyframes rotateRing {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.logo-main {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #D4AF37;
+    text-shadow: 0 0 30px #D4AF37;
+}
+
+.logo-m {
+    animation: logoMGlow 2s infinite;
+}
+
+.logo-amp {
+    color: #F5D742;
+    font-size: 2rem;
+    animation: logoAmpGlow 2s infinite;
+    animation-delay: 0.3s;
+}
+
+@keyframes logoMGlow {
+    0%, 100% { text-shadow: 0 0 30px #D4AF37; }
+    50% { text-shadow: 0 0 60px #F5D742; }
+}
+
+@keyframes logoAmpGlow {
+    0%, 100% { text-shadow: 0 0 30px #F5D742; }
+    50% { text-shadow: 0 0 60px #D4AF37; }
+}
+
+.card-title {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: transparent;
+    background: linear-gradient(135deg, #D4AF37, #F5D742);
+    -webkit-background-clip: text;
+    background-clip: text;
+    margin-bottom: 3px;
+}
+
+.card-subtitle {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #AAAAAA;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+/* ===== النموذج ===== */
+.booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.input-group {
+    position: relative;
+    width: 100%;
+}
+
+.input-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #D4AF37;
+    font-size: 0.9rem;
+    z-index: 2;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 45px 12px 15px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 40px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.9rem;
+    color: #FFFFFF;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-input:focus {
+    border-color: #D4AF37;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.form-input:focus + .input-focus-border {
+    transform: scaleX(1);
+}
+
+.form-input:focus ~ .input-icon {
+    opacity: 1;
+    color: #F5D742;
+}
+
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.85rem;
+}
+
+.input-focus-border {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    right: 20px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    border-radius: 2px;
+}
+
+/* ===== قسم الكود ===== */
+.code-wrapper {
+    background: linear-gradient(135deg, #111111, #1A1A1A);
+    border-radius: 40px;
+    padding: 10px 15px;
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+}
+
+.code-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #D4AF37;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.code-label i {
+    font-size: 1rem;
+}
+
+.code-box {
+    background: #000000;
+    padding: 4px 20px;
+    border-radius: 30px;
+    border: 1px solid #D4AF37;
+    box-shadow: 0 0 10px #D4AF37;
+}
+
+.code-number {
+    font-family: 'Courier New', monospace;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #D4AF37;
+    letter-spacing: 3px;
+    direction: ltr;
+}
+
+/* ===== رسائل الخطأ ===== */
+.error-message {
+    color: #FF4D4D;
+    font-size: 0.75rem;
+    padding: 6px 14px;
+    background: rgba(255, 77, 77, 0.1);
+    border-radius: 30px;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    border-right: 3px solid #FF4D4D;
+    margin-bottom: 5px;
+}
+
+.error-message i {
+    font-size: 0.9rem;
+}
+
+.error-message.show {
+    display: flex;
+}
+
+/* ===== أزرار الإرسال - التصميم السابق ===== */
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+.submit-btn i {
+    font-size: 1.2rem;
+}
+
+#sendToFirstBtn {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+}
+
+#sendToSecondBtn {
+    background: linear-gradient(135deg, #128C7E, #075E54);
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+}
+
+.submit-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* ===== عداد الزيارات في الفوتر ===== */
+.visitor-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 30px;
+    padding: 6px 18px;
+    margin-bottom: 15px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.9rem;
+    color: #FFFFFF;
+    backdrop-filter: blur(5px);
+}
+
+.visitor-counter i {
+    color: #D4AF37;
+    font-size: 1rem;
+}
+
+.counter-text {
+    color: #AAAAAA;
+    font-weight: 500;
+}
+
+.counter-number {
+    font-weight: 700;
+    color: #D4AF37;
+    font-size: 1.2rem;
+    margin-right: 5px;
+    direction: ltr;
+    font-family: 'Courier New', monospace;
+}
+
+/* ===== الفوتر ===== */
+.card-footer {
+    margin-top: 25px;
+    text-align: center;
+    position: relative;
+}
+
+.footer-text {
+    font-size: 0.75rem;
+    color: #AAAAAA;
+    opacity: 0.6;
+    margin-bottom: 3px;
+    letter-spacing: 1px;
+}
+
+.developer-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.developer-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: transparent;
+    background: linear-gradient(135deg, #D4AF37, #F5D742, #D4AF37);
+    -webkit-background-clip: text;
+    background-clip: text;
+    cursor: pointer;
+    position: relative;
+    padding: 3px 12px;
+    display: inline-block;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+    letter-spacing: 0.5px;
+}
+
+.developer-name::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+    transition: width 0.3s ease;
+}
+
+.developer-name:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+}
+
+.developer-name:hover::before {
+    width: 70%;
+}
+
+/* ===== تحسينات للجوال ===== */
+@media (max-width: 480px) {
+    .booking-card {
+        padding: 25px 20px;
+    }
+    
+    .submit-btn {
+        padding: 12px 16px;
+        font-size: 0.95rem;
+    }
+    
+    .visitor-counter {
+        padding: 5px 15px;
+        font-size: 0.85rem;
+    }
+    
+    .counter-number {
+        font-size: 1.1rem;
+    }
+    
+    .logo-main {
+        font-size: 2.2rem;
+    }
+    
+    .card-title {
+        font-size: 1.1rem;
+    }
+    
+    .code-number {
+        font-size: 1.3rem;
+    }
+    
+    .developer-name {
+        font-size: 0.95rem;
+    }
+}
+
+/* ===== تقليل الحركة للمستخدمين الذين يفضلون ذلك ===== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
