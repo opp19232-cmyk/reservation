@@ -37,6 +37,33 @@
         phone: document.getElementById('phone')
     };
 
+    // ===== دالة عرض رسالة تأكيد =====
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = 'toast-message';
+        
+        if (type === 'success') {
+            toast.style.background = 'linear-gradient(135deg, #25D366, #128C7E)';
+            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+        } else {
+            toast.style.background = 'linear-gradient(135deg, #FF4D4D, #CC0000)';
+            toast.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+        }
+        
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 100);
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 3000);
+    }
+
     // ===== تحميل الأكواد المخزنة =====
     function loadStoredCodes() {
         try {
@@ -72,15 +99,13 @@
             code++;
         }
         
-        // إذا وصلنا لـ 500 وما زال الكود مستخدم، نبحث عن أول كود غير مستخدم
         if (code > CONFIG.MAX_CODE) {
             for (let i = CONFIG.MIN_CODE; i <= CONFIG.MAX_CODE; i++) {
                 if (!usedCodes.has(i.toString())) {
                     return i;
                 }
             }
-            // إذا كانت جميع الأكواد من 1-500 مستخدمة
-            return CONFIG.MAX_CODE + 1; // هذا معناه نفاد الأكواد
+            return CONFIG.MAX_CODE + 1;
         }
         
         return code;
@@ -152,7 +177,7 @@
         return true;
     }
 
-    // ===== معالجة الحجز (مع التاريخ والوقت فقط) =====
+    // ===== معالجة الحجز (بدون تاريخ ووقت) =====
     const processBooking = (phoneNumber, name) => {
         if (!validateForm()) {
             return false;
@@ -161,7 +186,7 @@
         const barberCode = codeDisplay.textContent;
         
         if (barberCode === 'نفدت الأكواد') {
-            alert('عذراً، نفدت جميع الأكواد (1-500)');
+            showToast('عذراً، نفدت جميع الأكواد (1-500)', 'error');
             return false;
         }
         
@@ -185,21 +210,18 @@
         usedCodes.add(barberCode);
         saveCodes();
         
-        // الحصول على التاريخ والوقت الحالي
-        const now = new Date();
-        const date = now.toLocaleDateString('ar-EG');
-        const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-        
-        // إنشاء رسالة واتساب (كود + تاريخ + وقت فقط)
+        // إنشاء رسالة واتساب (بدون تاريخ ووقت)
         let message = '';
         message += '🔹 *حجز حلاقة M&M* 🔹\n';
         message += '👤 *الاسم:* ' + inputs.firstName.value.trim() + ' ' + inputs.lastName.value.trim() + '\n';
         message += '📞 *الهاتف:* ' + inputs.phone.value.trim() + '\n';
         message += '✂️ *كود الحجز:* ' + barberCode + '\n';
-        message += '📅 *تاريخ الحجز:* ' + date + '\n';
-        message += '⏰ *وقت الحجز:* ' + time;
+        message += '📩 *تم الإرسال إلى:* ' + name;
         
         window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+        
+        // عرض رسالة تأكيد
+        showToast(`✅ تم إرسال الحجز إلى ${name} بنجاح`, 'success');
         
         inputs.firstName.value = '';
         inputs.lastName.value = '';
