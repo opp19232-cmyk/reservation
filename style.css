@@ -511,7 +511,7 @@ body {
     display: flex;
 }
 
-/* ===== أزرار الإرسال - التصميم السابق ===== */
+/* ===== أزرار الإرسال ===== */
 .buttons-container {
     display: flex;
     flex-direction: column;
@@ -578,7 +578,104 @@ body {
     height: 300px;
 }
 
-/* ===== عداد الزيارات في الفوتر ===== */
+/* ===== المؤقت الزمني ===== */
+.daily-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 30px;
+    padding: 6px 15px;
+    margin-bottom: 8px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.8rem;
+    color: #FFFFFF;
+    backdrop-filter: blur(5px);
+}
+
+.daily-timer i {
+    color: #D4AF37;
+    font-size: 0.9rem;
+    animation: timerPulse 2s infinite;
+}
+
+@keyframes timerPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.timer-text {
+    color: #AAAAAA;
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+.timer-display {
+    font-weight: 700;
+    color: #D4AF37;
+    font-size: 0.9rem;
+    direction: ltr;
+    font-family: 'Courier New', monospace;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+}
+
+/* ===== عداد الأكواد المتبقية ===== */
+.codes-remaining {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 30px;
+    padding: 6px 15px;
+    margin-bottom: 8px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.8rem;
+    color: #FFFFFF;
+    backdrop-filter: blur(5px);
+}
+
+.codes-remaining i {
+    color: #D4AF37;
+    font-size: 0.9rem;
+    animation: tagPulse 2s infinite;
+}
+
+@keyframes tagPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+.remaining-text {
+    color: #AAAAAA;
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+.remaining-number {
+    font-weight: 800;
+    color: #D4AF37;
+    font-size: 1.2rem;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 10px;
+    border-radius: 20px;
+    direction: ltr;
+    font-family: 'Courier New', monospace;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+    transition: color 0.3s ease;
+}
+
+/* ===== عداد الزيارات ===== */
 .visitor-counter {
     display: flex;
     align-items: center;
@@ -587,19 +684,18 @@ body {
     background: rgba(212, 175, 55, 0.1);
     border: 1px solid rgba(212, 175, 55, 0.3);
     border-radius: 30px;
-    padding: 6px 18px;
-    margin-bottom: 15px;
+    padding: 6px 15px;
+    margin-bottom: 8px;
     width: fit-content;
     margin-left: auto;
     margin-right: auto;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #FFFFFF;
-    backdrop-filter: blur(5px);
 }
 
 .visitor-counter i {
     color: #D4AF37;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .counter-text {
@@ -610,7 +706,7 @@ body {
 .counter-number {
     font-weight: 700;
     color: #D4AF37;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-right: 5px;
     direction: ltr;
     font-family: 'Courier New', monospace;
@@ -618,15 +714,18 @@ body {
 
 /* ===== الفوتر ===== */
 .card-footer {
-    margin-top: 25px;
-    text-align: center;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
 }
 
 .footer-text {
     font-size: 0.75rem;
     color: #AAAAAA;
     opacity: 0.6;
+    margin-top: 5px;
     margin-bottom: 3px;
     letter-spacing: 1px;
 }
@@ -685,13 +784,14 @@ body {
         font-size: 0.95rem;
     }
     
-    .visitor-counter {
-        padding: 5px 15px;
-        font-size: 0.85rem;
+    .daily-timer, .codes-remaining, .visitor-counter {
+        padding: 5px 12px;
+        font-size: 0.75rem;
+        width: 90%;
     }
     
-    .counter-number {
-        font-size: 1.1rem;
+    .timer-display, .remaining-number, .counter-number {
+        font-size: 0.9rem;
     }
     
     .logo-main {
@@ -711,6 +811,13 @@ body {
     }
 }
 
+@media (max-width: 360px) {
+    .daily-timer, .codes-remaining {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+}
+
 /* ===== تقليل الحركة للمستخدمين الذين يفضلون ذلك ===== */
 @media (prefers-reduced-motion: reduce) {
     * {
@@ -718,4 +825,4 @@ body {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
-}
+    }
