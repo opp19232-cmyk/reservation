@@ -578,103 +578,6 @@ body {
     height: 300px;
 }
 
-/* ===== المؤقت الزمني ===== */
-.daily-timer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: rgba(212, 175, 55, 0.08);
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    border-radius: 30px;
-    padding: 6px 15px;
-    margin-bottom: 8px;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 0.8rem;
-    color: #FFFFFF;
-    backdrop-filter: blur(5px);
-}
-
-.daily-timer i {
-    color: #D4AF37;
-    font-size: 0.9rem;
-    animation: timerPulse 2s infinite;
-}
-
-@keyframes timerPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-}
-
-.timer-text {
-    color: #AAAAAA;
-    font-weight: 500;
-    font-size: 0.75rem;
-}
-
-.timer-display {
-    font-weight: 700;
-    color: #D4AF37;
-    font-size: 0.9rem;
-    direction: ltr;
-    font-family: 'Courier New', monospace;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 2px 8px;
-    border-radius: 20px;
-    letter-spacing: 1px;
-}
-
-/* ===== عداد الأكواد المتبقية ===== */
-.codes-remaining {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: rgba(212, 175, 55, 0.08);
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    border-radius: 30px;
-    padding: 6px 15px;
-    margin-bottom: 8px;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 0.8rem;
-    color: #FFFFFF;
-    backdrop-filter: blur(5px);
-}
-
-.codes-remaining i {
-    color: #D4AF37;
-    font-size: 0.9rem;
-    animation: tagPulse 2s infinite;
-}
-
-@keyframes tagPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.1); }
-}
-
-.remaining-text {
-    color: #AAAAAA;
-    font-weight: 500;
-    font-size: 0.75rem;
-}
-
-.remaining-number {
-    font-weight: 800;
-    color: #D4AF37;
-    font-size: 1.2rem;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 2px 10px;
-    border-radius: 20px;
-    direction: ltr;
-    font-family: 'Courier New', monospace;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-    transition: color 0.3s ease;
-}
-
 /* ===== عداد الزيارات ===== */
 .visitor-counter {
     display: flex;
@@ -685,7 +588,7 @@ body {
     border: 1px solid rgba(212, 175, 55, 0.3);
     border-radius: 30px;
     padding: 6px 15px;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     width: fit-content;
     margin-left: auto;
     margin-right: auto;
@@ -712,20 +615,47 @@ body {
     font-family: 'Courier New', monospace;
 }
 
+/* ===== رسالة التأكيد (Toast) ===== */
+.toast-message {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    transition: transform 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.toast-message.show {
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast-message i {
+    font-size: 1.2rem;
+}
+
 /* ===== الفوتر ===== */
 .card-footer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
     margin-top: 20px;
+    text-align: center;
+    position: relative;
 }
 
 .footer-text {
     font-size: 0.75rem;
     color: #AAAAAA;
     opacity: 0.6;
-    margin-top: 5px;
     margin-bottom: 3px;
     letter-spacing: 1px;
 }
@@ -784,14 +714,13 @@ body {
         font-size: 0.95rem;
     }
     
-    .daily-timer, .codes-remaining, .visitor-counter {
+    .visitor-counter {
         padding: 5px 12px;
-        font-size: 0.75rem;
-        width: 90%;
+        font-size: 0.8rem;
     }
     
-    .timer-display, .remaining-number, .counter-number {
-        font-size: 0.9rem;
+    .counter-number {
+        font-size: 1rem;
     }
     
     .logo-main {
@@ -809,12 +738,13 @@ body {
     .developer-name {
         font-size: 0.95rem;
     }
-}
-
-@media (max-width: 360px) {
-    .daily-timer, .codes-remaining {
-        flex-wrap: wrap;
-        gap: 4px;
+    
+    .toast-message {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+        width: 90%;
+        text-align: center;
+        justify-content: center;
     }
 }
 
