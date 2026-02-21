@@ -58,7 +58,7 @@
             </div>
             
             <h1 class="card-title">BARBER SHOP</h1>
-            <p class="card-subtitle">حجز كود الحلاقة </p>
+            <p class="card-subtitle">حجز كود الحلاقة الفريد</p>
 
             <!-- نموذج الحجز -->
             <form class="booking-form" id="bookingForm">
@@ -105,7 +105,7 @@
                     <span>الرجاء تعبئة جميع الحقول المطلوبة</span>
                 </div>
 
-                <!-- أزرار الإرسال - بالتصميم السابق والأسماء الجديدة -->
+                <!-- أزرار الإرسال -->
                 <div class="buttons-container">
                     <button type="submit" class="submit-btn" id="sendToFirstBtn" data-number="201126432778">
                         <i class="fab fa-whatsapp"></i>
@@ -119,8 +119,23 @@
                 </div>
             </form>
 
-            <!-- الفوتر مع عداد الزيارات -->
+            <!-- الفوتر مع جميع العدادات -->
             <div class="card-footer">
+                <!-- المؤقت الزمني -->
+                <div class="daily-timer">
+                    <i class="fas fa-hourglass-half"></i>
+                    <span class="timer-text">الوقت المتبقي لليوم الجديد:</span>
+                    <span class="timer-display" id="dailyTimer">00:00:00</span>
+                </div>
+                
+                <!-- عداد الأكواد المتبقية -->
+                <div class="codes-remaining">
+                    <i class="fas fa-tags"></i>
+                    <span class="remaining-text">الأكواد المتبقية اليوم:</span>
+                    <span class="remaining-number" id="remainingCodes">30</span>
+                </div>
+                
+                <!-- عداد الزيارات -->
                 <div class="visitor-counter">
                     <i class="fas fa-eye"></i>
                     <span class="counter-text">عدد الزيارات</span>
@@ -137,4 +152,4 @@
 
     <script src="script.js"></script>
 </body>
-</html>
+    </html>
