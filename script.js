@@ -1,10 +1,10 @@
 (function() {
     'use strict';
 
-    // ===== إعدادات النظام =====
+    // ===== إعدادات النظام (1 إلى 500) =====
     const CONFIG = {
         MIN_CODE: 1,
-        MAX_CODE_PER_DAY: 30,
+        MAX_CODE: 500,        // من 1 إلى 500
         WHATSAPP_NUMBERS: {
             first: '201126432778',
             second: '201503258404'
@@ -13,9 +13,7 @@
 
     // ===== تهيئة المتغيرات =====
     let usedCodes = new Set();
-    let allTimeCodes = new Set();
     let currentCode = CONFIG.MIN_CODE;
-    let today = getTodayDate();
 
     // عناصر DOM
     const loader = document.getElementById('loader');
@@ -27,8 +25,6 @@
     const bookingForm = document.getElementById('bookingForm');
     const devLink = document.getElementById('devLink');
     const visitorCountEl = document.getElementById('visitorCount');
-    const dailyTimerEl = document.getElementById('dailyTimer');
-    const remainingCodesEl = document.getElementById('remainingCodes');
     
     // أزرار واتساب
     const sendToFirstBtn = document.getElementById('sendToFirstBtn');
@@ -41,89 +37,52 @@
         phone: document.getElementById('phone')
     };
 
-    // ===== الحصول على تاريخ اليوم =====
-    function getTodayDate() {
-        const date = new Date();
-        return date.toISOString().split('T')[0];
-    }
-
-    // ===== تحديث عداد الأكواد المتبقية =====
-    function updateRemainingCodes() {
-        if (!remainingCodesEl) return;
-        
-        const usedToday = usedCodes.size;
-        let remaining = CONFIG.MAX_CODE_PER_DAY - usedToday;
-        if (remaining < 0) remaining = 0;
-        
-        remainingCodesEl.textContent = remaining;
-        
-        // تغيير اللون حسب العدد المتبقي
-        if (remaining <= 5 && remaining > 0) {
-            remainingCodesEl.style.color = '#FFA500'; // برتقالي
-        } else if (remaining === 0) {
-            remainingCodesEl.style.color = '#FF4D4D'; // أحمر
-        } else {
-            remainingCodesEl.style.color = '#D4AF37'; // ذهبي
-        }
-    }
-
-    // ===== تحميل البيانات المخزنة =====
-    function loadStoredData() {
+    // ===== تحميل الأكواد المخزنة =====
+    function loadStoredCodes() {
         try {
-            const allTimeStored = localStorage.getItem('mm_codes_all_time');
-            if (allTimeStored) {
-                allTimeCodes = new Set(JSON.parse(allTimeStored));
-            } else {
-                allTimeCodes = new Set();
-            }
-            
-            const dailyKey = `mm_codes_${today}`;
-            const dailyStored = localStorage.getItem(dailyKey);
-            
-            if (dailyStored) {
-                usedCodes = new Set(JSON.parse(dailyStored));
-                console.log('أكواد اليوم:', Array.from(usedCodes));
+            const stored = localStorage.getItem('mm_codes_500');
+            if (stored) {
+                usedCodes = new Set(JSON.parse(stored));
+                console.log('الأكواد المستخدمة:', Array.from(usedCodes));
             } else {
                 usedCodes = new Set();
-                console.log('يوم جديد - نبدأ من 1');
             }
             
             updateCurrentCode();
-            updateRemainingCodes();
             
         } catch (e) {
-            console.warn('فشل تحميل البيانات', e);
+            console.warn('فشل تحميل الأكواد', e);
             usedCodes = new Set();
-            allTimeCodes = new Set();
         }
     }
 
-    // ===== حفظ أكواد اليوم =====
-    function saveDailyCodes() {
+    // ===== حفظ الأكواد =====
+    function saveCodes() {
         try {
-            const dailyKey = `mm_codes_${today}`;
-            localStorage.setItem(dailyKey, JSON.stringify(Array.from(usedCodes)));
-            updateRemainingCodes();
+            localStorage.setItem('mm_codes_500', JSON.stringify(Array.from(usedCodes)));
         } catch (e) {
-            console.warn('فشل حفظ أكواد اليوم', e);
-        }
-    }
-
-    // ===== حفظ جميع الأكواد =====
-    function saveAllTimeCodes() {
-        try {
-            localStorage.setItem('mm_codes_all_time', JSON.stringify(Array.from(allTimeCodes)));
-        } catch (e) {
-            console.warn('فشل حفظ جميع الأكواد', e);
+            console.warn('فشل حفظ الأكواد', e);
         }
     }
 
     // ===== البحث عن الكود التالي المتاح =====
     function findNextAvailableCode() {
         let code = CONFIG.MIN_CODE;
-        while (usedCodes.has(code.toString())) {
+        while (usedCodes.has(code.toString()) && code <= CONFIG.MAX_CODE) {
             code++;
         }
+        
+        // إذا وصلنا لـ 500 وما زال الكود مستخدم، نبحث عن أول كود غير مستخدم
+        if (code > CONFIG.MAX_CODE) {
+            for (let i = CONFIG.MIN_CODE; i <= CONFIG.MAX_CODE; i++) {
+                if (!usedCodes.has(i.toString())) {
+                    return i;
+                }
+            }
+            // إذا كانت جميع الأكواد من 1-500 مستخدمة
+            return CONFIG.MAX_CODE + 1; // هذا معناه نفاد الأكواد
+        }
+        
         return code;
     }
 
@@ -132,12 +91,19 @@
         const newCode = findNextAvailableCode();
         currentCode = newCode;
         if (codeDisplay) {
-            codeDisplay.textContent = currentCode;
+            if (currentCode > CONFIG.MAX_CODE) {
+                codeDisplay.textContent = 'نفدت الأكواد';
+                codeDisplay.style.color = '#FF4D4D';
+            } else {
+                codeDisplay.textContent = currentCode;
+                codeDisplay.style.color = '#D4AF37';
+            }
         }
     }
 
     // ===== التحقق من أن الكود متاح =====
     function isCodeAvailable(code) {
+        if (parseInt(code) > CONFIG.MAX_CODE) return false;
         return !usedCodes.has(code.toString());
     }
 
@@ -145,10 +111,17 @@
     function handleInputChange() {
         const currentDisplayCode = codeDisplay.textContent;
         
+        if (currentDisplayCode === 'نفدت الأكواد') return;
+        
         if (!isCodeAvailable(currentDisplayCode)) {
             const nextCode = findNextAvailableCode();
-            codeDisplay.textContent = nextCode;
-            currentCode = nextCode;
+            if (nextCode > CONFIG.MAX_CODE) {
+                codeDisplay.textContent = 'نفدت الأكواد';
+                codeDisplay.style.color = '#FF4D4D';
+            } else {
+                codeDisplay.textContent = nextCode;
+                currentCode = nextCode;
+            }
             
             codeError.classList.add('show');
             setTimeout(() => {
@@ -179,7 +152,7 @@
         return true;
     }
 
-    // ===== معالجة الحجز (محدث مع إضافة التاريخ والوقت) =====
+    // ===== معالجة الحجز (مع التاريخ والوقت فقط) =====
     const processBooking = (phoneNumber, name) => {
         if (!validateForm()) {
             return false;
@@ -187,11 +160,21 @@
         
         const barberCode = codeDisplay.textContent;
         
+        if (barberCode === 'نفدت الأكواد') {
+            alert('عذراً، نفدت جميع الأكواد (1-500)');
+            return false;
+        }
+        
         if (!isCodeAvailable(barberCode)) {
             codeError.classList.add('show');
             const newCode = findNextAvailableCode();
-            codeDisplay.textContent = newCode;
-            currentCode = newCode;
+            if (newCode > CONFIG.MAX_CODE) {
+                codeDisplay.textContent = 'نفدت الأكواد';
+                codeDisplay.style.color = '#FF4D4D';
+            } else {
+                codeDisplay.textContent = newCode;
+                currentCode = newCode;
+            }
             
             setTimeout(() => {
                 codeError.classList.remove('show');
@@ -200,24 +183,21 @@
         }
         
         usedCodes.add(barberCode);
-        saveDailyCodes();
-        allTimeCodes.add(barberCode);
-        saveAllTimeCodes();
+        saveCodes();
         
         // الحصول على التاريخ والوقت الحالي
         const now = new Date();
-        const date = now.toLocaleDateString('ar-EG'); // تنسيق: يوم/شهر/سنة
-        const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }); // تنسيق: ساعة:دقيقة
+        const date = now.toLocaleDateString('ar-EG');
+        const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
         
-        // إنشاء رسالة واتساب مع التاريخ والوقت
+        // إنشاء رسالة واتساب (كود + تاريخ + وقت فقط)
         let message = '';
         message += '🔹 *حجز حلاقة M&M* 🔹\n';
         message += '👤 *الاسم:* ' + inputs.firstName.value.trim() + ' ' + inputs.lastName.value.trim() + '\n';
         message += '📞 *الهاتف:* ' + inputs.phone.value.trim() + '\n';
         message += '✂️ *كود الحجز:* ' + barberCode + '\n';
         message += '📅 *تاريخ الحجز:* ' + date + '\n';
-        message += '⏰ *وقت الحجز:* ' + time + '\n';
-        message += '👨‍💼 *تم الإرسال إلى:* ' + name;
+        message += '⏰ *وقت الحجز:* ' + time;
         
         window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
         
@@ -227,56 +207,8 @@
         
         updateCurrentCode();
         
-        if (parseInt(barberCode) > CONFIG.MAX_CODE_PER_DAY) {
-            alert('تنبيه: تم تجاوز الـ 30 كود! الكود الحالي ' + barberCode);
-        }
-        
         return true;
     };
-
-    // ===== المؤقت الزمني =====
-    function startDailyTimer() {
-        if (!dailyTimerEl) return;
-        
-        function updateTimer() {
-            const now = new Date();
-            const tomorrow = new Date(now);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            tomorrow.setHours(0, 0, 0, 0);
-            
-            const timeRemaining = tomorrow - now;
-            
-            if (timeRemaining <= 0) {
-                location.reload();
-                return;
-            }
-            
-            const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
-            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-            
-            const formattedHours = hours.toString().padStart(2, '0');
-            const formattedMinutes = minutes.toString().padStart(2, '0');
-            const formattedSeconds = seconds.toString().padStart(2, '0');
-            
-            dailyTimerEl.textContent = formattedHours + ':' + formattedMinutes + ':' + formattedSeconds;
-        }
-        
-        updateTimer();
-        setInterval(updateTimer, 1000);
-    }
-
-    // ===== التحقق من بداية يوم جديد =====
-    function checkNewDay() {
-        const lastVisitDate = localStorage.getItem('mm_last_visit_date');
-        const today = getTodayDate();
-        
-        if (lastVisitDate && lastVisitDate !== today) {
-            console.log('مرحباً بك في يوم جديد!');
-        }
-        
-        localStorage.setItem('mm_last_visit_date', today);
-    }
 
     // ===== شاشة التحميل =====
     function initLoader() {
@@ -312,15 +244,17 @@
 
     // ===== عداد الزيارات =====
     function initVisitorCounter() {
-        let visitorCount = 0;
+        if (!visitorCountEl) return;
         
         try {
             const COUNTER_KEY = 'mm_visitor_counter';
             const SESSION_KEY = 'mm_session_counted';
             
+            let visitorCount = 0;
             const stored = localStorage.getItem(COUNTER_KEY);
             if (stored) {
                 visitorCount = parseInt(stored);
+                if (isNaN(visitorCount)) visitorCount = 0;
             }
             
             const sessionCounted = sessionStorage.getItem(SESSION_KEY);
@@ -331,15 +265,11 @@
                 sessionStorage.setItem(SESSION_KEY, 'true');
             }
             
-            if (visitorCountEl) {
-                visitorCountEl.textContent = visitorCount;
-            }
+            visitorCountEl.textContent = visitorCount;
             
         } catch (e) {
             console.warn('فشل تحديث عداد الزيارات');
-            if (visitorCountEl) {
-                visitorCountEl.textContent = '0';
-            }
+            visitorCountEl.textContent = '0';
         }
     }
 
@@ -373,40 +303,12 @@
 
     // ===== بدء التطبيق =====
     window.addEventListener('load', () => {
-        today = getTodayDate();
-        loadStoredData();
+        loadStoredCodes();
         initVisitorCounter();
-        startDailyTimer();
-        checkNewDay();
         initLoader();
         
-        console.log('تاريخ اليوم:', today);
-        console.log('الأكواد المستخدمة اليوم:', usedCodes.size);
-        console.log('الأكواد المتبقية:', CONFIG.MAX_CODE_PER_DAY - usedCodes.size);
+        console.log('الأكواد من 1 إلى 500');
+        console.log('الأكواد المستخدمة:', usedCodes.size);
     });
-
-    // ===== فحص دوري للكود =====
-    setInterval(() => {
-        const newToday = getTodayDate();
-        if (newToday !== today) {
-            console.log('تم تغيير التاريخ - يوم جديد');
-            location.reload();
-        }
-        
-        const disp = codeDisplay.textContent;
-        if (!isCodeAvailable(disp)) {
-            const nextCode = findNextAvailableCode();
-            codeDisplay.textContent = nextCode;
-            currentCode = nextCode;
-            codeError.classList.add('show');
-            
-            setTimeout(() => {
-                codeError.classList.remove('show');
-            }, 3000);
-        }
-        
-        updateRemainingCodes();
-        
-    }, 5000);
 
 })();
